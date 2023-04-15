@@ -1,10 +1,8 @@
-# setup.se2
-
 
 ## Content
 1. [Getting Started](#1-getting-started)                    (2 Pt)
 2. [Running the Application](#2-running-the-application)    (1 Pt)
-3. [Building the Application](#3-buiding-the-application)   (1 Pt)
+3. [Building the Application](#3-building-the-application)   (1 Pt)
 4. [Completing the Application](#4-completing-the-application) (2 Pts)
 5. [Testing the Application](#5-testing-the-application)    (2 Pts)
 6. [Generating Javadoc](#6-generating-javadoc)              (1 Pt)
