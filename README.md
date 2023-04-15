@@ -1,92 +1,443 @@
 # setup.se2
 
 
+## Content
+1. [Getting Started](#1-getting-started)                    (2 Pt)
+2. [Running the Application](#2-running-the-application)    (1 Pt)
+3. [Building the Application](#3-buiding-the-application)   (1 Pt)
+4. [Completing the Application](#4-completing-the-application) (2 Pts)
+5. [Testing the Application](#5-testing-the-application)    (2 Pts)
+6. [Generating Javadoc](#6-generating-javadoc)              (1 Pt)
+7. [Checking the Project into Git](#7-checking-into-git)    (1 Pt)
 
-## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+&nbsp;
+## 1. Getting started
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Make sure to have the [Java-JDK](https://www.oracle.com/java/technologies/downloads/)
+(version 17 or higher) installed and all tools show the same version (if different
+versions, check `$PATH` ).
 
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Open a terminal and run:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.bht-berlin.de/sgraupner/setup.se2.git
-git branch -M main
-git push -uf origin main
+java --version          ; the Java VM
+javac --version         ; the Java Compiler
+javadoc --version       ; the Javadoc processor
+jar --version           ; the Java archiver to package .jar files
 ```
 
-## Integrate with your tools
+Same version for all Java tools, 17 or higher:
 
-- [ ] [Set up project integrations](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/settings/integrations)
+```
+java 19 2022-09-20      ; Java VM
+...
+javac 19
+javadoc 19
+jar 19
+```
 
-## Collaborate with your team
+Create a Java project with following structure.
+Source code is in a dirctory called *src*.
+Unit tests are in dirctory called *test* at the same level as *src*.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```
+-<setup.se2>                ; project directory
+  |
+  +--<src>                  ; source code
+  |   |
+  |   +--<application>      ; package directory 'application'
+  |       +-- App.java      ; class: application.App
+  |
+  +--<test>                 ; test code
+  |   |
+  |   +--<application>
+  |       +-- AppTest.java  ; JUnit test class: application.AppTest
+  |
+  +--<lib>                  ; libraries (JUnit runner, JUnit jars)
+  |   +-- junit-platform-console-standalone-1.9.2.jar
+  |   +-- org.junit.<...>.jar
+  |
+  +--<resources>            ; scripts to compile and run code outside IDE
+  |   +-- javac-options.opt         ; compile code (javac)
+  |   +-- jdoc-options.opt          ; create javadoc
+  |   +-- junit-options.opt         ; run JUnit tests
+  |   +-- java-options.opt          ; run java JVM
+  |
+  +--<doc>                  ; directory where javadocs are created
+  |
+  +--<target>               ; directory for compiled code from src and test
+      |
+      +--<application>      ; package directory of compiled code
+          +-- App.class, AppTest.class      ; compiled classes
+```
 
-## Test and Deploy
+Configure your IDE such that it produces compiled code (.class files) in a
+dirctory called *target*.
 
-Use the built-in continuous integration in GitLab.
+- In *eclipse*, add *test* as second source directory in Build Path -> Sources
+    and change the default output folder to *target*.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- For *IntelliJ*, see [*Change the output directory?*](https://www.jetbrains.com/help/idea/configure-modules.html#module-compiler-output)
 
-***
+- For *VSCode*, see the project settings file:
+[*.vscode/settings.json*](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/.vscode/settings.json).
 
-# Editing this README
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+&nbsp;
+## 2. Running the Application
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Run `App.java` in the IDE. The program factorizes numbers:
 
-## Name
-Choose a self-explaining name for your project.
+```
+Hello, App!
+n=36 factorized is: [2, 2, 3, 3]
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Make sure files are in the proper place. Open a terminal and navigate
+to the project directory:
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```
+cd .../setup.se2                            ; navigate to the project directory
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+find src test resources target out bin      ; list files
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Output:
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+```
+src
+src/application
+src/application/App.java
+test
+test/application
+test/application/AppTest.java
+resources
+resources/java-options.opt
+resources/javac-options.opt
+resources/jdoc-options.opt
+resources/junit-options.opt
+target/                                     ; compiled classes are in 'target'
+target/application
+target/application/App.class
+target/application/AppTest.class
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+find: 'out': No such file or directory      ; no 'out' or 'bin' directory as
+find: 'bin': No such file or directory      ; used by eclipse or IntelliJ
+```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Run the application outside the IDE from the terminal (in the project directory).
+Classpath tells the JVM where to find compiled classes:
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+```
+java --class-path=target application.App
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Output:
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+```
+Hello, App!
+n=36 factorized is: [2, 2, 3, 3]
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+So-called `opt`-files can be used to summarize command line parameters.
+Run the application using the `java-options.opt` file from the resources
+directory, which includes the classpath parameter:
 
-## License
-For open source projects, say how it is licensed.
+```
+cat resources/java-options.opt              ; show opt file for java (JVM)
+```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Content of resources/java-options.opt (most lines are #comments):
+
+```
+# Options for program execution for JavaVM
+# --module-path <path>  - where java looks for modules
+# --add-modules <modules> - modules to include in launch
+#
+# use:
+#  java @resources/java-options.opt application.App
+#
+# --module-path="bin:lib" --add-modules="se1.bestellsystem"
+# --enable-preview --class-path=target
+
+--class-path=target
+```
+
+Run the application using parameters from the opt file:
+
+```
+java @resources/java-options.opt application.App    ; run with opt file
+```
+
+```
+Hello, App!
+n=36 factorized is: [2, 2, 3, 3]
+```
+
+
+&nbsp;
+## 3. Building the Application
+
+Building the application means running the compiler (*javac*) and generating all
+compiled files from sources, here: *src* and tests from *test*.
+
+Clear the target directory and *"rebuild"" the project.
+
+```
+rm -rf target/*                     ; remove all compiled files from target
+
+cat resources/javac-options.opt     ; show the opt-file for the Java compiler (javac)
+```
+
+The command line passed to the java compiler includes the `--class-path` with the
+JUnit jar files needed to compile the test classes. It also has the parameter to
+tell the compiler to output compiled code to the target directory `-d target`.
+
+For the  classpath it is **important** that Windows uses `";"` as separaor
+while other systems Mac and Linux use `":"`.
+
+The script `javac-options.opt` uses `";"` (for Windows) by default.
+**For Mac and Linux**, adjust `javac-options.opt` to use `":"` as separator.
+
+Compile source code from *src* and *test* :
+
+```
+javac @resources/javac-options.opt src/application/App.java
+javac @resources/javac-options.opt test/application/AppTest.java
+```
+
+
+Verify the project has been rebuild and compiled classes are in the *target* directory:
+
+```
+find target                         ; list content of target directory
+```
+
+Output:
+
+```
+target                              ; content of target has been rebuilt
+target/application
+target/application/App.class
+target/application/AppTest.class
+```
+
+
+&nbsp;
+## 4. Completing the Application
+
+In order for the program to factorize arbitrary numbers *n*, the method
+`List<Integer> factorize(int n)` must be completed.
+
+Complete this function e.g. using the
+[prime-factor algorithm](https://www.geeksforgeeks.org/prime-factor/) and
+run the application again with a new *n*=1092 as argument:
+
+```
+java @resources/java-options.opt application.App 1092   ; run with opt file or without
+
+java --class-path=target application.App 1092           ; pass 1092 as parameter
+```
+
+Output: *n*=1092 = 2 * 2 * 3 * 7 * 13 
+
+```
+Hello, App!
+n=1092 factorized is: [2, 2, 3, 7, 13]
+```
+
+Try also other numbers *n*, e.g.:
+- *n*=109237 -> [313, 349] or
+- *n*=59,534,165 -> [5, 109, 313, 349],
+- *n*=59,534,166 -> [2, 3, 23, 151, 2857]
+- *n*=59,534,167 -> [7, 7, 7, 11, 31, 509]
+
+
+&nbsp;
+## 5. Testing the Application
+
+To run JUnit tests, compile tests (if not already):
+
+```
+javac @resources/javac-options.opt test/application/AppTest.java
+```
+
+Run JUnit tests from `AppTest.java` in your IDE. If tests fail, locate the failing
+test and understand why it is failing. Fix your code such that the test passes.
+Never "fix" or comment tests.
+
+When tests pass in the IDE, run tests outside the IDE with or without opt file:
+
+```
+java @resources/junit-options.opt --scan-class-path     ; running tests with opt file
+
+                                                        ; running tests plain
+java -jar lib/junit-platform-console-standalone-1.9.2.jar --class-path target --scan-class-path
+```
+
+JUnit tests are run with a test runner that scans output directories for compiled
+files with JUnit @Test annotations and executes them.
+
+The test runner in `./lib` that used here is `junit-platform-console-standalone-1.9.2.jar`
+from the [maven repository](https://mvnrepository.com/artifact/org.junit.platform/junit-platform-console-standalone).
+
+
+Output of test runs:
+
+```
+Thanks for using JUnit! Support its development at https://junit.org/sponsoring
+.
++-- JUnit Jupiter [OK]
+| '-- AppTest [OK]
+|   +-- test0003_FactorizeExceptionCases() [OK]
+|   +-- test0001_FactorizeRegularCases() [OK]
+|   '-- test0002_FactorizeCornerCases() [OK]
++-- JUnit Vintage [OK]
+'-- JUnit Platform Suite [OK]
+
+Test run finished after 212 ms
+[         4 containers found      ]
+[         0 containers skipped    ]
+[         4 containers started    ]
+[         0 containers aborted    ]
+[         4 containers successful ]
+[         0 containers failed     ]
+[         3 tests found           ]     <- 3 tests found
+[         0 tests skipped         ]
+[         3 tests started         ]
+[         0 tests aborted         ]
+[         3 tests successful      ]     <- 3 tests successful
+[         0 tests failed          ]     <- 0 tests failed
+```
+
+
+&nbsp;
+## 6. Generating Javadoc
+
+Javadoc can be generated with the javadoc opt file:
+
+```
+javadoc @resources/jdoc-options.opt application
+```
+Output of the javadoc generation process:
+```
+Loading source files for package application...
+Constructing Javadoc information...
+Building index for all the packages and classes...
+Standard Doclet version 19+36-2238
+Building tree for all the packages and classes...
+Generating doc\application\App.html...
+Generating doc\application\package-summary.html...
+Generating doc\application\package-tree.html...
+Generating doc\overview-tree.html...
+Building index for all classes...
+Generating doc\allclasses-index.html...
+Generating doc\allpackages-index.html...
+Generating doc\index-all.html...
+Generating doc\search.html...
+Generating doc\index.html...
+Generating doc\help-doc.html...
+```
+The final result is in the *doc* directory.
+```
+find doc
+```
+Output of the javadoc generation process:
+```
+doc
+doc/allclasses-index.html
+doc/allpackages-index.html
+doc/application
+doc/application/App.html
+doc/application/package-summary.html
+doc/application/package-tree.html
+doc/copy.svg
+doc/element-list
+doc/help-doc.html
+doc/index-all.html
+doc/index.html                  <-- entry file for javadoc
+doc/jquery-ui.overrides.css
+doc/legal
+doc/legal/COPYRIGHT
+doc/legal/jquery.md
+doc/legal/jqueryUI.md
+doc/legal/LICENSE
+doc/member-search-index.js
+doc/module-search-index.js
+doc/overview-tree.html
+doc/package-search-index.js
+doc/resources
+doc/resources/glass.png
+doc/resources/x.png
+doc/script-dir
+doc/script-dir/jquery-3.6.0.min.js
+doc/script-dir/jquery-ui.min.css
+doc/script-dir/jquery-ui.min.js
+doc/script.js
+doc/search-page.js
+doc/search.html
+doc/search.js
+doc/stylesheet.css
+doc/tag-search-index.js
+doc/type-search-index.js
+```
+
+Open `doc/index.html` in a browser.
+
+
+&nbsp;
+## 7. Checking into Git
+
+To complete the project, check the project into a local Git repository.
+
+Make sure to **not check-in** files (use *.gitignore* ):
+
+- generated or compiled files (from *target* or *doc* ),
+
+- not sharable project files, e.g. *.classpath* and *.project*,
+
+- junk files, e.g. *.DS_Store* from Mac.
+
+Check-in files:
+
+- source files including JUnit test sources.
+
+- opt files from the *./resources* directory.
+
+- *.gitignore*, *README.md* .
+
+Show the commit history:
+
+```
+git log
+git log --oneline
+```
+
+Output (example):
+
+```
+644d3a5 (HEAD -> main) add .gitignore
+615908c (origin/main, origin/HEAD) Initial commit
+```
+
+Show all committed files:
+
+```
+git ls-files --recurse-submodules
+```
+
+Output (may also include ./lib if you checked out the repository):
+
+```
+.gitignore
+.vscode/settings.json           ; optional commit
+README.md
+lib/...                         ; may be committed
+resources/java-options.opt
+resources/javac-options.opt
+resources/jdoc-options.opt
+resources/junit-options.opt
+src/application/App.java
+test/application/AppTest.java
+```
