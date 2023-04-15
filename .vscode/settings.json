@@ -1,0 +1,14 @@
+{
+    "java.project.sourcePaths": [
+        "src", "test"
+    ],
+    "java.project.outputPath": "target",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ],
+
+    "code-runner.defaultLanguage": "java",
+    "code-runner.executorMap": {
+        "java": "javac -d target src/application/App.java && cd target && java application.App"
+    }
+}
