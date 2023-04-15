@@ -1,0 +1,20 @@
+# Options for javadoc:
+# --source-path	<path>	- where javadoc looks for source modules, packages
+# --module-path	<path>	- where javadoc looks for required modules
+#  -d <dir>		- output directory
+#  -version		- include version tag
+#  -private		- include private classes
+# --show-members public	- include only public member fields and methods
+#  -noqualifier "java.lang:java.io:java.util" - don't use fully qualified package names in javadocs
+#
+# use:
+#  javadoc @resources/jdoc-options.opt application
+#
+# see:
+#  https://docs.oracle.com/en/java/javase/17/javadoc/index.html
+#  https://docs.oracle.com/en/java/javase/17/docs/specs/man/javadoc.html
+#  https://docs.oracle.com/javase/9/javadoc/javadoc-command.htm
+#
+# --source-path "src" --module-path "lib" -d doc -version -author -noqualifier "java.*:application.*"
+
+--source-path "src" -d doc -version -author -noqualifier "java.*:application.*"
