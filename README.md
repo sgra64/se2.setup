@@ -1,12 +1,13 @@
 
 ## Content
-1. [Getting Started](#1-getting-started)                    (2 Pt)
-2. [Running the Application](#2-running-the-application)    (1 Pt)
-3. [Building the Application](#3-building-the-application)   (1 Pt)
-4. [Completing the Application](#4-completing-the-application) (2 Pts)
-5. [Testing the Application](#5-testing-the-application)    (2 Pts)
-6. [Generating Javadoc](#6-generating-javadoc)              (1 Pt)
-7. [Checking the Project into Git](#7-checking-into-git)    (1 Pt)
+1. [Getting Started](#1-getting-started)                        (2 Pt)
+2. [Running the Application](#2-running-the-application)        (1 Pt)
+3. [Building the Application](#3-building-the-application)      (1 Pt)
+4. [Completing the Application](#4-completing-the-application)  (2 Pts)
+5. [Testing the Application](#5-testing-the-application)        (1 Pts)
+6. [Generating Javadoc](#6-generating-javadoc)                  (1 Pt)
+7. [Packaging the Application](#7-packaging-the-application)    (1 Pt)
+8. [Checking the Project into Git](#8-checking-into-git)        (1 Pt)
 
 
 &nbsp;
@@ -14,7 +15,7 @@
 
 Make sure to have the [Java-JDK](https://www.oracle.com/java/technologies/downloads/)
 (version 17 or higher) installed and all tools show the same version (if different
-versions, check `$PATH` ).
+versions, check `$PATH`).
 
 Open a terminal and run:
 
@@ -28,11 +29,11 @@ jar --version           ; the Java archiver to package .jar files
 Same version for all Java tools, 17 or higher:
 
 ```
-java 19 2022-09-20      ; Java VM
+java 21 2023-09-19 LTS      ; Java VM
 ...
-javac 19
-javadoc 19
-jar 19
+javac 21
+javadoc 21
+jar 21
 ```
 
 Create a Java project with following structure.
@@ -323,7 +324,7 @@ Output of the javadoc generation process:
 Loading source files for package application...
 Constructing Javadoc information...
 Building index for all the packages and classes...
-Standard Doclet version 19+36-2238
+Standard Doclet version 21+35-LTS-2513
 Building tree for all the packages and classes...
 Generating doc\application\App.html...
 Generating doc\application\package-summary.html...
@@ -355,12 +356,12 @@ doc/element-list
 doc/help-doc.html
 doc/index-all.html
 doc/index.html                  <-- entry file for javadoc
-doc/jquery-ui.overrides.css
 doc/legal
 doc/legal/COPYRIGHT
 doc/legal/jquery.md
 doc/legal/jqueryUI.md
 doc/legal/LICENSE
+doc/link.svg
 doc/member-search-index.js
 doc/module-search-index.js
 doc/overview-tree.html
@@ -369,7 +370,7 @@ doc/resources
 doc/resources/glass.png
 doc/resources/x.png
 doc/script-dir
-doc/script-dir/jquery-3.6.0.min.js
+doc/script-dir/jquery-3.6.1.min.js
 doc/script-dir/jquery-ui.min.css
 doc/script-dir/jquery-ui.min.js
 doc/script.js
@@ -385,7 +386,79 @@ Open `doc/index.html` in a browser.
 
 
 &nbsp;
-## 7. Checking into Git
+## 7. Packaging the Application
+
+Finally, generated artefacts (e.g. compiled classed in *target*)
+need to be packaged for delivery.
+
+Java uses the Java-Archive (JAR) format generated with the
+[jar](https://docs.oracle.com/en/java/javase/21/docs/specs/man/jar.html)
+command for packaging.
+
+```
+jar --help                              ; Anzeige der jar - Argumente
+jar cvf app.jar -C target application   ; Erzeugen des Hello.jar files
+ls -la app.jar                          ; Anzeige des erzeugten .jar – Files
+
+-rwxr-xr-x  1 svgr2 Kein  3056 Oct 10 20:01 app.jar
+```
+
+Anzeige des Inhalts des erzeugten .jar – Files:
+```
+jar tvf app.jar
+
+    0 Tue Oct 10 20:01:32 CEST 2023 META-INF/
+  62 Tue Oct 10 20:01:32 CEST 2023 META-INF/MANIFEST.MF
+    0 Tue Oct 10 19:44:08 CEST 2023 application/
+1781 Tue Oct 10 19:45:18 CEST 2023 application/App.class
+2992 Tue Oct 10 19:45:18 CEST 2023 application/AppTest.class
+```
+
+Ausführung des .jar – Files:
+```
+java --class-path=app.jar application.App 777
+
+Hello, App!
+n=777 factorized is: [3, 7, 37]
+```
+
+In order to directly execute, an *executable .jar* file must be
+created, which includes the definition of the *main()* function in
+META-INF/[MANIFEST.MF]().
+
+The `-e` argument creates this entry in MANIFEST.MF for in `app_executable.jar`:
+```
+jar -c -v -f app_executable.jar -e application.App -C target application
+```
+
+Extract MANIFEST.MF from the .jar to the target directory:
+```
+jar xvf app_executable.jar META-INF
+mv META-INF target
+```
+
+Show MANIFEST.MF:
+```
+cat target/META-INF/MANIFEST.MF
+
+Manifest-Version: 1.0
+Created-By: 21 (Oracle Corporation)
+Main-Class: application.App       <-- class with main() function to launch
+```
+
+Run the packaged .jar file as final test:
+```
+java -jar app_executable.jar 777
+
+Hello, App!
+n=777 factorized is: [3, 7, 37]
+```
+
+The packaged .jar file can now be distributed.
+
+
+&nbsp;
+## 8. Checking into Git
 
 To complete the project, check the project into a local Git repository.
 
