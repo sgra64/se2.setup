@@ -14,7 +14,7 @@
 ## 1. Getting started
 
 Make sure to have the [Java-JDK](https://www.oracle.com/java/technologies/downloads/)
-(version 17 or higher) installed and all tools show the same version.
+version <b>21</b> (LTS, long-term support) installed and all tools show the same version.
 
 Open a terminal and run:
 
@@ -25,7 +25,7 @@ javadoc --version       ; the Javadoc processor
 jar --version           ; the Java archiver to package .jar files
 ```
 
-Same version for all Java tools, 17 or higher:
+Same version for all Java tools, 21 or higher:
 
 ```
 java 21 2023-09-19 LTS      ; Java VM
