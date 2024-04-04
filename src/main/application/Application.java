@@ -58,6 +58,6 @@ public class Application implements Runnable {
      * @return {@link Runnable} application instance
      */
     public static Runnable createApplicationInstance(String[] args) {
-        return new Factorizer_2(args);
+        return new Factorizer(args);
     }
 }
