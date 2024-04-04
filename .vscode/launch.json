@@ -1,0 +1,25 @@
+//-----------------------------------------------------------------------------
+// Definitions for VSCode "Run and Debug" view to run and debug code.
+//-----------------------------------------------------------------------------
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Application",
+            "request": "launch",
+            "mainClass": "application.Application",
+            "projectName": "se2_setup",
+            "vmArgs": "",
+            "args": "n=10 n=100 n=1000"
+        },
+        {
+            "name": "Current File",
+            "request": "launch",
+            "type": "java",
+            "mainClass": "${file}",
+            "vmArgs": "-ea",
+            "args": ""
+        }
+    ]
+}

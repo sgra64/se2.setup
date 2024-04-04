@@ -1,14 +1,26 @@
+//-----------------------------------------------------------------------------
+// Project settings for VSCode
+//
+// used in conjunction with system-side settings.json file
+// (on Windows in: C:/Users/<user>/AppData/Roaming/Code/User/settings.json)
+//-----------------------------------------------------------------------------
 {
-    "java.project.sourcePaths": [
-        "src", "test"
-    ],
-    "java.project.outputPath": "target",
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar"
-    ],
+    // set terminal configuration to source the project when new terminal is opened
+    "terminal.integrated.profiles.windows": {
+        "Project Bash": {
+          "path": ["bash"],
+          "args": ["--init-file", "'${workspaceFolder}'/.vscode/launch_terminal.sh" ],
+          "icon": "terminal-bash"
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "Project Bash",
 
+    // Java code runner properties
     "code-runner.defaultLanguage": "java",
+    "code-runner.clearPreviousOutput": true,
     "code-runner.executorMap": {
-        "java": "javac -d target src/application/App.java && cd target && java application.App"
-    }
+        // "javac": "javac @.env/.modulepath -d target/classes src/main/application/Application.java",
+        "java": "cp -R src/resources target && java @.env/.classpath application.Application"
+    },
+    "java.debug.settings.onBuildFailureProceed": true,
 }

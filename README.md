@@ -1,8 +1,7 @@
-
 ## Content
 1. [Getting Started](#1-getting-started)                        (2 Pt)
-2. [Running the Application](#2-running-the-application)        (1 Pt)
-3. [Building the Application](#3-building-the-application)      (1 Pt)
+2. [Building the Application](#2-building-the-application)      (1 Pt)
+3. [Running the Application](#3-running-the-application)        (1 Pt)
 4. [Completing the Application](#4-completing-the-application)  (2 Pts)
 5. [Testing the Application](#5-testing-the-application)        (1 Pts)
 6. [Generating Javadoc](#6-generating-javadoc)                  (1 Pt)
@@ -14,8 +13,7 @@
 ## 1. Getting started
 
 Make sure to have the [Java-JDK](https://www.oracle.com/java/technologies/downloads/)
-(version 17 or higher) installed and all tools show the same version (if different
-versions, check `$PATH`).
+(version 17 or higher) installed and all tools show the same version.
 
 Open a terminal and run:
 
@@ -38,420 +36,433 @@ jar 21
 
 Create a Java project with following structure.
 Source code is in a dirctory called *src*.
-Unit tests are in dirctory called *test* at the same level as *src*.
+Unit tests are in dirctory called *tests*.
+
+```sh
+--<se1.play>:
+ |
+ +-- README.md                          # project markup file (this file)
+ |
+ | # directory to source the project
+ +--<.env>
+ |   +-- project.sh, init.classpath, init.project, init.gitignore
+ |
+ | # VSCode project configurations
+ +--<.vscode>
+ |   +-- settings.json                  # project-specific VSCode settings
+ |   +-- launch.json                    # Java/Debug launch configurtions
+ |   +-- launch_terminal.sh             # terminal launch configurtions
+ |
+ | # local git repository
+ +--<.git>
+ |   +-- config, HEAD                   # git config file, HEAD pointer file
+ |   +--<objects>                       # git object store
+ |   +--<refs>                          # git references store
+ +-- .gitignore                         # files with patterns to ignore by git
+ |
+ | # libraries/modules needed by the project:
+ +--<libs>
+ |   +--<junit>                         # JUnit .jar files
+ |   |   +-- apiguardian-api-1.1.2.jar, junit-platform-commons-1.9.3.jar,
+ |   |   +-- junit-jupiter-api-5.9.3.jar, opentest4j-1.2.0.jar
+ |   +--<jacoco>                        # Code coverage .jar files
+ |   |   +-- jacocoagent.jar  jacococli.jar
+ |   +--<jackson>                       # JSON library for Java
+ |   |   +-- jackson-annotations-2.13.0.jar, jackson-databind-2.13.0.jar,
+ |   |       jackson-core-2.13.0.jar
+ |   +-- junit-platform-console-standalone-1.9.2.jar    # JUnit runtime
+ |
+ | # source code:
+ +--<src>
+ |   +--<main>                      # Java source code with packages
+ |   |   +-- module-info.java           # module defintion file
+ |   |   +--<application>               # Java package 'application'
+ |   |       +-- package-info.java      # 'application'-package defintion
+ |   |       +-- Application.java       # main application program with main()
+ |   |       +-- Factorizer.java        # class with factorize() method
+ |   |
+ |   +--<resources>                 # non-Java source code, mainly configuration
+ |   |   +-- application.properties     # properties file for running the application
+ |   |   +-- logging.properties         # logging properties
+ |   |   +--<META-INF>                  # jar-packaging information
+ |   |       +-- MANIFEST.MF            # jar-manifest file with main class
+ |   |
+ |   +--<tests>                     # Unit-test source code separated from src/main
+ |       +--<application>               # mirrored package structure
+ |           +-- Application_0_always_pass_Tests.java   # initial JUnit-test
+ |           +-- Factorizer_Tests.java  # JUnit-test class
+ |
+ | # generated artefacts, compiled classes:
+ +--<target>
+ |   +-- application-1.0.0-SNAPSHOT.jar # executable .jar file (main artefact)
+ |   +--<classes>                       # compiled Java classes (.class files)
+ |   |   +-- module-info.class          # compiled module-info class
+ |   |   +--<application>               # compiled 'application' package
+ |   |       +-- package-info.class
+ |   |       +-- Application.class
+ |   |       +-- Factorizer.class
+ |   |
+ |   +--<test-classes>              # compiled test classes
+ |       +--<application>
+ |           +-- Application_0_always_pass_Tests.class
+ |           +-- Factorizer_Tests.class
+ |
+```
+
+Source the project in otder to set up the environment:
+
+```sh
+source .env/project.sh
+```
+
+Execution of the script
+[project.sh](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/.env/project.sh?ref_type=heads)
+sets environment variables and creates local project files for
+*VS Code* and *eclipse* IDE:
 
 ```
--<setup.se2>                ; project directory
-  |
-  +--<src>                  ; source code
-  |   |
-  |   +--<application>      ; package directory 'application'
-  |       +-- App.java      ; class: application.App
-  |
-  +--<test>                 ; test code
-  |   |
-  |   +--<application>
-  |       +-- AppTest.java  ; JUnit test class: application.AppTest
-  |
-  +--<lib>                  ; libraries (JUnit runner, JUnit jars)
-  |   +-- junit-platform-console-standalone-1.9.2.jar
-  |   +-- org.junit.<...>.jar
-  |
-  +--<resources>            ; scripts to compile and run code outside IDE
-  |   +-- javac-options.opt         ; compile code (javac)
-  |   +-- jdoc-options.opt          ; create javadoc
-  |   +-- junit-options.opt         ; run JUnit tests
-  |   +-- java-options.opt          ; run java JVM
-  |
-  +--<doc>                  ; directory where javadocs are created
-  |
-  +--<target>               ; directory for compiled code from src and test
-      |
-      +--<application>      ; package directory of compiled code
-          +-- App.class, AppTest.class      ; compiled classes
+setting the project environment
+ - environment variables:
+    - CLASSPATH
+    - MODULEPATH
+    - JDK_JAVAC_OPTIONS
+    - JDK_JAVADOC_OPTIONS
+    - JUNIT_OPTIONS
+ - files created:
+    - .env/.classpath
+    - .classpath
+    - .project
+    - .gitignore
+project environment is set (use 'wipe' to reset)
 ```
 
-Configure your IDE such that it produces compiled code (.class files) in a
-dirctory called *target*.
-
-- In *eclipse*, add *test* as second source directory in Build Path -> Sources
-    and change the default output folder to *target*.
-
-- For *IntelliJ*, see [*Change the output directory?*](https://www.jetbrains.com/help/idea/configure-modules.html#module-compiler-output)
-
-- For *VSCode*, see the project settings file:
-[*.vscode/settings.json*](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/.vscode/settings.json).
-
-
-&nbsp;
-## 2. Running the Application
-
-Run `App.java` in the IDE. The program factorizes numbers:
-
-```
-Hello, App!
-n=36 factorized is: [2, 2, 3, 3]
-```
+All files and environment variables can be reset with the `wipe` command
+(and rebuild with `source .env/project.sh`).
 
 Make sure files are in the proper place. Open a terminal and navigate
 to the project directory:
 
-```
-cd .../setup.se2                            ; navigate to the project directory
-
-find src test resources target out bin      ; list files
+```sh
+find src
 ```
 
 Output:
 
 ```
 src
-src/application
-src/application/App.java
-test
-test/application
-test/application/AppTest.java
-resources
-resources/java-options.opt
-resources/javac-options.opt
-resources/jdoc-options.opt
-resources/junit-options.opt
-target/                                     ; compiled classes are in 'target'
-target/application
-target/application/App.class
-target/application/AppTest.class
-
-find: 'out': No such file or directory      ; no 'out' or 'bin' directory as
-find: 'bin': No such file or directory      ; used by eclipse or IntelliJ
-```
-
-Run the application outside the IDE from the terminal (in the project directory).
-Classpath tells the JVM where to find compiled classes:
-
-```
-java --class-path=target application.App
-```
-
-Output:
-
-```
-Hello, App!
-n=36 factorized is: [2, 2, 3, 3]
-```
-
-So-called `opt`-files can be used to summarize command line parameters.
-Run the application using the `java-options.opt` file from the resources
-directory, which includes the classpath parameter:
-
-```
-cat resources/java-options.opt              ; show opt file for java (JVM)
-```
-
-Content of resources/java-options.opt (most lines are #comments):
-
-```
-# Options for program execution for JavaVM
-# --module-path <path>  - where java looks for modules
-# --add-modules <modules> - modules to include in launch
-#
-# use:
-#  java @resources/java-options.opt application.App
-#
-# --module-path="bin:lib" --add-modules="se1.bestellsystem"
-# --enable-preview --class-path=target
-
---class-path=target
-```
-
-Run the application using parameters from the opt file:
-
-```
-java @resources/java-options.opt application.App    ; run with opt file
-```
-
-```
-Hello, App!
-n=36 factorized is: [2, 2, 3, 3]
+src/main
+src/main/application
+src/main/application/Application.java
+src/main/application/Factorizer.java
+src/main/application/Factorizer_2.java
+src/main/application/package-info.java
+src/main/application/RunPriority.java
+src/main/module-info.java
+src/resources
+src/resources/application.properties
+src/resources/logging.properties
+src/resources/META-INF
+src/resources/META-INF/MANIFEST.MF
+src/tests
+src/tests/application
+src/tests/application/Application_0_always_pass_Tests.java
+src/tests/application/Factorizer_Tests.java
 ```
 
 
 &nbsp;
-## 3. Building the Application
+## 2. Building the Application
 
-Building the application means running the compiler (*javac*) and generating all
-compiled files from sources, here: *src* and tests from *test*.
+The *Build-Process* comprises operations such as:
 
-Clear the target directory and *"rebuild"" the project.
+ - compile source code
 
-```
-rm -rf target/*                     ; remove all compiled files from target
+ - compile tests
 
-cat resources/javac-options.opt     ; show the opt-file for the Java compiler (javac)
-```
+ - build javadocs
 
-The command line passed to the java compiler includes the `--class-path` with the
-JUnit jar files needed to compile the test classes. It also has the parameter to
-tell the compiler to output compiled code to the target directory `-d target`.
+ - package the application as '.jar'
 
-For the  classpath it is **important** that Windows uses `";"` as separaor
-while other systems Mac and Linux use `":"`.
+Command `show` shows operations that are available for the *Build-Process*:
 
-The script `javac-options.opt` uses `";"` (for Windows) by default.
-**For Mac and Linux**, adjust `javac-options.opt` to use `":"` as separator.
-
-Compile source code from *src* and *test* :
-
-```
-javac @resources/javac-options.opt src/application/App.java
-javac @resources/javac-options.opt test/application/AppTest.java
+```sh
+show
 ```
 
+```
+source | project:
+  source .env/project.sh
 
-Verify the project has been rebuild and compiled classes are in the *target* directory:
+classpath:
+  echo $CLASSPATH | tr "[;:]" "\n"
+
+compile:
+  javac $(find src/main -name '*.java') -d target/classes; \
+  copy src/resources target/resources
+
+compile-tests:
+  javac $(find src/tests -name '*.java') -d target/test-classes; \
+  copy src/resources target/resources
+
+resources:
+  copy src/resources target/resources
+
+run:
+  java application.Application
+
+run-tests:
+  java -jar libs/junit-platform-console-standalone-1.9.2.jar \
+       $(eval echo $JUNIT_OPTIONS) --scan-class-path
+
+javadoc:
+  javadoc -d docs $(eval echo $JDK_JAVADOC_OPTIONS)
+
+clean:
+  rm -rf target logs docs
+
+wipe:
+```
+
+Execute build steps with the `build` or `mk` (make) command:
+
+```sh
+mk compile                        # compile source code
+mk compile-tests                  # compile test code
+
+mk clean compile compile-tests    # execute all commands in order
+```
+
+The last command is called a *clean build*. It clears the `target` directory
+and re-compiles all source code.
+
+The result is in the `target` directory:
+
+```sh
+find target
+```
+
+Output
 
 ```
-find target                         ; list content of target directory
+target
+target/classes
+target/classes/application
+target/classes/application/Application.class
+target/classes/application/Factorizer.class
+target/classes/application/Factorizer_2.class
+target/classes/application/package_info.class
+target/classes/application/RunPriority.class
+target/classes/module-info.class
+target/resources
+target/resources/application.properties
+target/resources/logging.properties
+target/test-classes
+target/test-classes/application
+target/test-classes/application/Application_0_always_pass_Tests.class
+target/test-classes/application/Factorizer_Tests.class
+```
+
+
+&nbsp;
+## 3. Running the Application
+
+After building the application, it can be run using the `run` command
+and passing a number `n` to factorize.
+
+```sh
+mk run n=36
 ```
 
 Output:
 
 ```
-target                              ; content of target has been rebuilt
-target/application
-target/application/App.class
-target/application/AppTest.class
+java application.Application n=36
+Hello, Factorizer
+n=36
+ - factorized: [2, 2, 3, 3]
+done.
 ```
 
 
 &nbsp;
 ## 4. Completing the Application
 
-In order for the program to factorize arbitrary numbers *n*, the method
-`List<Integer> factorize(int n)` must be completed.
+Class
+[Factorizer.java](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/src/main/application/Factorizer.java/?ref_type=heads)
+hardwires the output for *n=36*.
 
-Complete this function e.g. using the
-[prime-factor algorithm](https://www.geeksforgeeks.org/prime-factor/) and
-run the application again with a new *n*=1092 as argument:
+Implement the method:
+
+```java
+    /**
+     * Factorize a number into smallest prime factors.
+     * <p>
+     * Examples:
+     * <pre>
+     * n=27 -> [3, 3, 3]
+     * n=1092 -> [2, 2, 3, 7, 13]
+     * n=10952347 -> [7, 23, 59, 1153]
+     * </pre>
+     * @param n number to factorize
+     * @return list of factors
+     */
+    @Override
+    public List<Integer> factorize(int n) {
+      ...
+    }
+```
+
+to work for other numbers as well. 
+
+```sh
+mk run n=36 n=9 n=109237
+```
+
+Output:
 
 ```
-java @resources/java-options.opt application.App 1092   ; run with opt file or without
-
-java --class-path=target application.App 1092           ; pass 1092 as parameter
+java application.Application n=36 n=9 n=109237
+Hello, Factorizer
+n=36
+ - factorized: [2, 2, 3, 3]
+n=9
+ - factorized: [3, 3]
+n=109237
+ - factorized: [313, 349]
+done.
 ```
 
-Output: *n*=1092 = 2 * 2 * 3 * 7 * 13 
+Try larger numbers:
+
+```sh
+mk run n=59534165 n=59534166 n=59534167
+```
+
+Output:
 
 ```
-Hello, App!
-n=1092 factorized is: [2, 2, 3, 7, 13]
+Hello, Factorizer
+n=59534165
+ - factorized: [5, 109, 313, 349]
+n=59534166
+ - factorized: [2, 3, 23, 151, 2857]
+n=59534167
+ - factorized: [7, 7, 7, 11, 31, 509]
+done.
 ```
-
-Try also other numbers *n*, e.g.:
-- *n*=109237 -> [313, 349] or
-- *n*=59,534,165 -> [5, 109, 313, 349],
-- *n*=59,534,166 -> [2, 3, 23, 151, 2857]
-- *n*=59,534,167 -> [7, 7, 7, 11, 31, 509]
 
 
 &nbsp;
 ## 5. Testing the Application
 
-To run JUnit tests, compile tests (if not already):
+Run JUnit-Tests in the IDE and with:
 
-```
-javac @resources/javac-options.opt test/application/AppTest.java
-```
-
-Run JUnit tests from `AppTest.java` in your IDE. If tests fail, locate the failing
-test and understand why it is failing. Fix your code such that the test passes.
-Never "fix" or comment tests.
-
-When tests pass in the IDE, run tests outside the IDE with or without opt file:
-
-```
-java @resources/junit-options.opt --scan-class-path     ; running tests with opt file
-
-                                                        ; running tests plain
-java -jar lib/junit-platform-console-standalone-1.9.2.jar --class-path target --scan-class-path
+```sh
+mk compile-tests run-tests
 ```
 
-JUnit tests are run with a test runner that scans output directories for compiled
-files with JUnit @Test annotations and executes them.
-
-The test runner in `./lib` that used here is `junit-platform-console-standalone-1.9.2.jar`
-from the [maven repository](https://mvnrepository.com/artifact/org.junit.platform/junit-platform-console-standalone).
-
-
-Output of test runs:
+Output:
 
 ```
-Thanks for using JUnit! Support its development at https://junit.org/sponsoring
-.
-+-- JUnit Jupiter [OK]
-| '-- AppTest [OK]
-|   +-- test0003_FactorizeExceptionCases() [OK]
-|   +-- test0001_FactorizeRegularCases() [OK]
-|   '-- test0002_FactorizeCornerCases() [OK]
-+-- JUnit Vintage [OK]
-'-- JUnit Platform Suite [OK]
+├─ JUnit Jupiter ✔
+│  ├─ Application_0_always_pass_Tests ✔
+│  │  ├─ test_001_always_pass() ✔
+│  │  └─ test_002_always_pass() ✔
+│  └─ Factorizer_Tests ✔
+│     ├─ test0003_FactorizeExceptionCases() ✔
+│     ├─ test0001_FactorizeRegularCases() ✔
+│     └─ test0002_FactorizeCornerCases() ✔
+├─ JUnit Vintage ✔
+└─ JUnit Platform Suite ✔
 
-Test run finished after 212 ms
-[         4 containers found      ]
+Test run finished after 197 ms
+[         5 containers found      ]
 [         0 containers skipped    ]
-[         4 containers started    ]
+[         5 containers started    ]
 [         0 containers aborted    ]
-[         4 containers successful ]
+[         5 containers successful ]
 [         0 containers failed     ]
-[         3 tests found           ]     <- 3 tests found
+[         5 tests found           ]
 [         0 tests skipped         ]
-[         3 tests started         ]
+[         5 tests started         ]
 [         0 tests aborted         ]
-[         3 tests successful      ]     <- 3 tests successful
-[         0 tests failed          ]     <- 0 tests failed
+[         5 tests successful      ]   <-- 5 tests successful
+[         0 tests failed          ]   <-- 0 tests failed
+done.
 ```
 
 
 &nbsp;
 ## 6. Generating Javadoc
 
-Javadoc can be generated with the javadoc opt file:
+Build the javadoc for the project. Customize your name as author in
+[package-info.java](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/src/main/application/package-info.java?ref_type=heads).
+
+```sh
+mk javadoc
+```
+
+Output:
 
 ```
-javadoc @resources/jdoc-options.opt application
-```
-Output of the javadoc generation process:
-```
+javadoc -d docs $(eval echo $JDK_JAVADOC_OPTIONS)
 Loading source files for package application...
 Constructing Javadoc information...
 Building index for all the packages and classes...
 Standard Doclet version 21+35-LTS-2513
 Building tree for all the packages and classes...
-Generating doc\application\App.html...
-Generating doc\application\package-summary.html...
-Generating doc\application\package-tree.html...
-Generating doc\overview-tree.html...
+Generating docs\se1_play\application\Application.html...
+Generating docs\se1_play\application\Factorizer.html...
+Generating docs\se1_play\application\Factorizer_2.html...
+Generating docs\se1_play\application\RunPriority.html...
+Generating docs\se1_play\application\package-summary.html...
+Generating docs\se1_play\application\package-tree.html...
+Generating docs\se1_play\module-summary.html...
+Generating docs\overview-tree.html...
 Building index for all classes...
-Generating doc\allclasses-index.html...
-Generating doc\allpackages-index.html...
-Generating doc\index-all.html...
-Generating doc\search.html...
-Generating doc\index.html...
-Generating doc\help-doc.html...
-```
-The final result is in the *doc* directory.
-```
-find doc
-```
-Output of the javadoc generation process:
-```
-doc
-doc/allclasses-index.html
-doc/allpackages-index.html
-doc/application
-doc/application/App.html
-doc/application/package-summary.html
-doc/application/package-tree.html
-doc/copy.svg
-doc/element-list
-doc/help-doc.html
-doc/index-all.html
-doc/index.html                  <-- entry file for javadoc
-doc/legal
-doc/legal/COPYRIGHT
-doc/legal/jquery.md
-doc/legal/jqueryUI.md
-doc/legal/LICENSE
-doc/link.svg
-doc/member-search-index.js
-doc/module-search-index.js
-doc/overview-tree.html
-doc/package-search-index.js
-doc/resources
-doc/resources/glass.png
-doc/resources/x.png
-doc/script-dir
-doc/script-dir/jquery-3.6.1.min.js
-doc/script-dir/jquery-ui.min.css
-doc/script-dir/jquery-ui.min.js
-doc/script.js
-doc/search-page.js
-doc/search.html
-doc/search.js
-doc/stylesheet.css
-doc/tag-search-index.js
-doc/type-search-index.js
+Generating docs\allclasses-index.html...
+Generating docs\allpackages-index.html...
+Generating docs\index-all.html...
+Generating docs\search.html...
+Generating docs\index.html...
+Generating docs\help-doc.html...
+done.
 ```
 
-Open `doc/index.html` in a browser.
+Open `docs/index.html` in a browser.
 
 
 &nbsp;
 ## 7. Packaging the Application
 
-Finally, generated artefacts (e.g. compiled classed in *target*)
-need to be packaged for delivery.
+*Packaging* is part of the *Build-Process* in which a `.jar` file (jar: Java archive)
+is created that contains all compiled classes and a
+[MANIFEST.MF](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/src/resources/META-INF/MANIFEST.MF?ref_type=heads) - file
+that describes the class to execute (Main-Class: application.Application).
 
-Java uses the Java-Archive (JAR) format generated with the
-[jar](https://docs.oracle.com/en/java/javase/21/docs/specs/man/jar.html)
-command for packaging.
-
-```
-jar --help                              ; Anzeige der jar - Argumente
-jar cvf app.jar -C target application   ; Erzeugen des Hello.jar files
-ls -la app.jar                          ; Anzeige des erzeugten .jar – Files
-
--rwxr-xr-x  1 svgr2 Kein  3056 Oct 10 20:01 app.jar
+```sh
+mk jar
 ```
 
-Anzeige des Inhalts des erzeugten .jar – Files:
-```
-jar tvf app.jar
+packages class files and creates the resulting `application-1.0.0-SNAPSHOT.jar`
+in the `target` directory.
 
-    0 Tue Oct 10 20:01:32 CEST 2023 META-INF/
-  62 Tue Oct 10 20:01:32 CEST 2023 META-INF/MANIFEST.MF
-    0 Tue Oct 10 19:44:08 CEST 2023 application/
-1781 Tue Oct 10 19:45:18 CEST 2023 application/App.class
-2992 Tue Oct 10 19:45:18 CEST 2023 application/AppTest.class
+Test the jar-file with:
+
+```sh
+mk run-jar n=100 n=1000
 ```
 
-Ausführung des .jar – Files:
-```
-java --class-path=app.jar application.App 777
+Output:
 
-Hello, App!
-n=777 factorized is: [3, 7, 37]
 ```
-
-In order to directly execute, an *executable .jar* file must be
-created, which includes the definition of the *main()* function in
-META-INF/[MANIFEST.MF]().
-
-The `-e` argument creates this entry in MANIFEST.MF for in `app_executable.jar`:
-```
-jar -c -v -f app_executable.jar -e application.App -C target application
-```
-
-Extract MANIFEST.MF from the .jar to the target directory:
-```
-jar xvf app_executable.jar META-INF
-mv META-INF target
-```
-
-Show MANIFEST.MF:
-```
-cat target/META-INF/MANIFEST.MF
-
-Manifest-Version: 1.0
-Created-By: 21 (Oracle Corporation)
-Main-Class: application.App       <-- class with main() function to launch
-```
-
-Run the packaged .jar file as final test:
-```
-java -jar app_executable.jar 777
-
-Hello, App!
-n=777 factorized is: [3, 7, 37]
+java -jar target/application-1.0.0-SNAPSHOT.jar n=100 n=1000
+Hello, Factorizer_2
+n=100
+ - factorized: [2, 2, 5, 5]
+n=1000
+ - factorized: [2, 2, 2, 5, 5, 5]
+done.
 ```
 
 The packaged .jar file can now be distributed.

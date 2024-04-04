@@ -1,7 +1,8 @@
 package application;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -11,9 +12,18 @@ import java.util.Arrays;
 /**
  * JUnit 5 tests.
  */
-public class AppTest {
+public class Factorizer_Tests {
 
-    private App app = new App();
+    private static Factorizer app;
+
+    @BeforeAll
+    public static void setUpBeforeClass() throws Exception {
+        String[] args = new String[] {};
+        var f = Application.createApplicationInstance(args);
+        if(Factorizer.class.isAssignableFrom(f.getClass())) {
+            app = (Factorizer)f;
+        }
+    }
 
     @Test
     public void test0001_FactorizeRegularCases() {
