@@ -1,12 +1,13 @@
 ## Content
-1. [Getting Started](#1-getting-started)                        (2 Pt)
-2. [Building the Application](#2-building-the-application)      (1 Pt)
-3. [Running the Application](#3-running-the-application)        (1 Pt)
-4. [Completing the Application](#4-completing-the-application)  (2 Pts)
-5. [Testing the Application](#5-testing-the-application)        (1 Pts)
-6. [Generating Javadoc](#6-generating-javadoc)                  (1 Pt)
-7. [Packaging the Application](#7-packaging-the-application)    (1 Pt)
-8. [Checking the Project into Git](#8-checking-into-git)        (1 Pt)
+1. [Getting Started](#1-getting-started)                        (2 Pts)
+2. [Sourcing the Project](#2-sourcing-the-project)              (1 Pt)
+3. [Building the Application](#3-building-the-application)      (1 Pt)
+4. [Running the Application](#4-running-the-application)        (1 Pt)
+5. [Completing the Application](#5-completing-the-application)  (3 Pts)
+6. [Testing the Application](#6-testing-the-application)        (1 Pts)
+7. [Generating Javadoc](#7-generating-javadoc)                  (1 Pt)
+8. [Packaging the Application](#8-packaging-the-application)    (1 Pt)
+9. [Checking the Project into Git](#9-checking-into-git)        (1 Pt)
 
 
 &nbsp;
@@ -109,13 +110,17 @@ Unit tests are in dirctory called *tests*.
  |
 ```
 
-Source the project in otder to set up the environment:
+
+&nbsp;
+## 2. Sourcing the Project
+
+Sourcing the project means to set up the environment:
 
 ```sh
 source .env/project.sh
 ```
 
-Execution of the script
+Executing script
 [project.sh](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/.env/project.sh?ref_type=heads)
 sets environment variables and creates local project files for
 *VS Code* and *eclipse* IDE:
@@ -171,7 +176,7 @@ src/tests/application/Factorizer_Tests.java
 
 
 &nbsp;
-## 2. Building the Application
+## 3. Building the Application
 
 The *Build-Process* comprises operations such as:
 
@@ -264,7 +269,7 @@ target/test-classes/application/Factorizer_Tests.class
 
 
 &nbsp;
-## 3. Running the Application
+## 4. Running the Application
 
 After building the application, it can be run using the `run` command
 and passing a number `n` to factorize.
@@ -285,7 +290,7 @@ done.
 
 
 &nbsp;
-## 4. Completing the Application
+## 5. Completing the Application
 
 Class
 [Factorizer.java](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/src/main/application/Factorizer.java/?ref_type=heads)
@@ -353,7 +358,7 @@ done.
 
 
 &nbsp;
-## 5. Testing the Application
+## 6. Testing the Application
 
 Run JUnit-Tests in the IDE and with:
 
@@ -393,7 +398,7 @@ done.
 
 
 &nbsp;
-## 6. Generating Javadoc
+## 7. Generating Javadoc
 
 Build the javadoc for the project. Customize your name as author in
 [package-info.java](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/src/main/application/package-info.java?ref_type=heads).
@@ -433,7 +438,7 @@ Open `docs/index.html` in a browser.
 
 
 &nbsp;
-## 7. Packaging the Application
+## 8. Packaging the Application
 
 *Packaging* is part of the *Build-Process* in which a `.jar` file (jar: Java archive)
 is created that contains all compiled classes and a
@@ -469,7 +474,7 @@ The packaged .jar file can now be distributed.
 
 
 &nbsp;
-## 8. Checking into Git
+## 9. Checking into Git
 
 To complete the project, check the project into a local Git repository.
 
