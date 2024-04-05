@@ -160,7 +160,6 @@ src/main
 src/main/application
 src/main/application/Application.java
 src/main/application/Factorizer.java
-src/main/application/Factorizer_2.java
 src/main/application/package-info.java
 src/main/application/RunPriority.java
 src/main/module-info.java
@@ -256,7 +255,6 @@ target/classes
 target/classes/application
 target/classes/application/Application.class
 target/classes/application/Factorizer.class
-target/classes/application/Factorizer_2.class
 target/classes/application/package_info.class
 target/classes/application/RunPriority.class
 target/classes/module-info.class
@@ -420,7 +418,6 @@ Standard Doclet version 21+35-LTS-2513
 Building tree for all the packages and classes...
 Generating docs\se1_play\application\Application.html...
 Generating docs\se1_play\application\Factorizer.html...
-Generating docs\se1_play\application\Factorizer_2.html...
 Generating docs\se1_play\application\RunPriority.html...
 Generating docs\se1_play\application\package-summary.html...
 Generating docs\se1_play\application\package-tree.html...
@@ -464,7 +461,7 @@ Output:
 
 ```
 java -jar target/application-1.0.0-SNAPSHOT.jar n=100 n=1000
-Hello, Factorizer_2
+Hello, Factorizer
 n=100
  - factorized: [2, 2, 5, 5]
 n=1000
