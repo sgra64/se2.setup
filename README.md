@@ -1,13 +1,14 @@
 ## Content
-1. [Getting Started](#1-getting-started)                        (2 Pts)
-2. [Sourcing the Project](#2-sourcing-the-project)              (1 Pt)
-3. [Building the Application](#3-building-the-application)      (1 Pt)
-4. [Running the Application](#4-running-the-application)        (1 Pt)
-5. [Completing the Application](#5-completing-the-application)  (3 Pts)
-6. [Testing the Application](#6-testing-the-application)        (1 Pts)
-7. [Generating Javadoc](#7-generating-javadoc)                  (1 Pt)
-8. [Packaging the Application](#8-packaging-the-application)    (1 Pt)
-9. [Checking the Project into Git](#9-checking-into-git)        (1 Pt)
+ 1. [Getting Started](#1-getting-started)                        (1 Pt)
+ 2. [Sourcing the Project](#2-sourcing-the-project)              (1 Pt)
+ 3. [Building the Application](#3-building-the-application)      (1 Pt)
+ 4. [Running the Application](#4-running-the-application)        (1 Pt)
+ 5. [Completing the Application](#5-completing-the-application)  (3 Pts)
+ 6. [Testing the Application](#6-testing-the-application)        (1 Pt)
+ 7. [Generating Javadoc](#7-generating-javadoc)                  (1 Pt)
+ 8. [Packaging the Application](#8-packaging-the-application)    (1 Pt)
+ 9. [Checking the Project into Git](#9-checking-into-git)        (1 Pt)
+10. [How does *Build* work?](#10-how-does-build-work)              (1 Pt)
 
 
 &nbsp;
@@ -529,3 +530,92 @@ resources/junit-options.opt
 src/application/App.java
 test/application/AppTest.java
 ```
+
+
+
+
+&nbsp;
+## 10. How does *Build* work?
+
+In previous sections, commands `mk`, `make` or `build` were used to
+perform the various steps of the build process.
+
+For example:
+
+```sh
+make compile compile-tests    # or short: mk compile compile-tests
+```
+
+issues the commands to compile sources and tests using the Java compiler
+`javac` plus copying resources over to target:
+
+```
+  javac $(find src/main -name '*.java') -d target/classes; \
+  copy src/resources target/resources
+  javac $(find src/tests -name '*.java') -d target/test-classes; \
+  copy src/resources target/resources
+```
+
+Similarly, the `javadoc` short command is used to build the Java
+documentation:
+
+```sh
+build javadoc
+```
+
+issues the command for the Javadoc compiler to create the documentation
+in the `docs` directory using values in the `JDK_JAVADOC_OPTIONS`
+environment variable:
+
+```
+javadoc -d docs $(eval echo $JDK_JAVADOC_OPTIONS)
+```
+
+The full list of command short-cuts (`compile`, `compile-tests`) and
+their executable, full commands can be seen with:
+
+```sh
+show --all                    # list all shorts and full commands
+```
+
+When the project is wiped:
+
+```
+build javadoc
+build: command not found
+
+wipe
+wipe: command not found
+```
+
+Find answers to these quesitons:
+
+1) Where do these magic commands: `make`, `mk`, `build`, `wipe`, etc. ?
+
+1) Where are they defined?
+
+1) What are they (installed programs, scripts, Java code, ... )?
+
+1) In which programming language are they implemented?
+
+1) What does the following fragment do?
+
+    ```sh
+    local module_jars=( $(find libs/*/ -name '*.jar' 2>/dev/null) )
+    local entries=(
+        "target/classes"
+        "target/test-classes"
+        "target/resources"
+        ${module_jars[@]}
+    )
+
+    [ "$(uname | grep 'CYGWIN\|MINGW')" ] && local sep=';' || local sep=':'
+
+    if [ -z "$CLASSPATH" ]; then
+        export CLASSPATH=""
+        for entry in ${entries[@]}; do
+            [ ! -z "$CLASSPATH" ] && CLASSPATH+=${sep}
+            CLASSPATH+=$entry
+        done
+    fi
+    ```
