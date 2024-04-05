@@ -6,21 +6,40 @@
 //-----------------------------------------------------------------------------
 {
     // set terminal configuration to source the project when new terminal is opened
+    // see: https://code.visualstudio.com/docs/terminal/profiles
     "terminal.integrated.profiles.windows": {
-        "Project Bash": {
-          "path": ["bash"],
-          "args": ["--init-file", "'${workspaceFolder}'/.vscode/launch_terminal.sh" ],
-          "icon": "terminal-bash"
-        }
+        //
+        "Bash": {
+          "path": ["bash"],             // invoke bash.exe
+          "args": ["--init-file", "'${workspaceFolder}'/.vscode/launch_terminal.sh"],
+          "icon": "terminal-bash",
+        },
+        "Cmd": {
+            "path": ["cmd"],            // invoke cmd.exe
+        },
+        "PowerShell": {
+            "path": "powershell",       // invoke powershell.exe
+            // "args": ["-noexit", "-file", "${env:APPDATA}\\PowerShell\\custom-init.ps1"],
+            "args": ["-noexit"],
+        },
+        "Git Bash": null,               // remove from menu
+        "Command Prompt": null,
+        "JavaScript Debug Terminal": null,
     },
-    "terminal.integrated.defaultProfile.windows": "Project Bash",
+    "terminal.integrated.defaultProfile.windows": "Bash",
+    // 
+    // Run/Debug Java launcher issues "C:\\" java path, use cmd.exe or powershell.exe
+    "terminal.integrated.automationProfile.windows": {
+        "path": "cmd"
+    },
 
     // Java code runner properties
     "code-runner.defaultLanguage": "java",
     "code-runner.clearPreviousOutput": true,
     "code-runner.executorMap": {
         // "javac": "javac @.env/.modulepath -d target/classes src/main/application/Application.java",
-        "java": "cp -R src/resources target && java @.env/.classpath application.Application"
+        // "java": "cp -R src/resources target && java @.env/.classpath application.Application"
+        "java": "java @.env/.classpath application.Application n=10 n=100 n=1000",
     },
     "java.debug.settings.onBuildFailureProceed": true,
 }

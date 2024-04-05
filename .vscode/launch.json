@@ -8,7 +8,7 @@
             "type": "java",
             "name": "Application",
             "request": "launch",
-            "mainClass": "application.Application",
+            "mainClass": "se2_setup/application.Application",
             "projectName": "se2_setup",
             "vmArgs": "",
             "args": "n=10 n=100 n=1000"
