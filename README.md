@@ -192,6 +192,7 @@ Command `show` shows operations that are available for the *Build-Process*:
 
 ```sh
 show
+show --all
 ```
 
 ```
