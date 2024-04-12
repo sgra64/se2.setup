@@ -20,14 +20,14 @@
 #  - source .env/project.sh     ; build / re-build the project environment
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-# command aliases
+# set command aliases
 [ -z "$(alias mk 2>/dev/null)" ] && aliases_present=false || aliases_present=true
 alias mk="make"
 alias build="make"
 alias wipe="make wipe --silent"
 alias clean="make clean"
 
-# map with project paths and files
+# map contains project paths and files
 declare -gA P=(
     [src]="src/main"
     [tests]="src/tests"
@@ -198,7 +198,8 @@ function cmd() {
     run-tests)  cmd=("java -jar ${P[lib]}/junit-platform-console-standalone-1.9.2.jar \\"
                 "  \$(eval echo \$JUNIT_OPTIONS)" "--scan-class-path")
                 ;;
-    javadoc)    cmd=("javadoc -d ${P[doc]} \$(eval echo \$JDK_JAVADOC_OPTIONS) \\"
+    javadoc)    # append package names containing .java files after $JDK_JAVADOC_OPTIONS
+                cmd=("javadoc -d ${P[doc]} \$(eval echo \$JDK_JAVADOC_OPTIONS) \\"
                 "  \$(cd ${P[src]}; find . -type f | xargs dirname | uniq | cut -c 3-)")
                 ;;
 
