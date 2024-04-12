@@ -21,6 +21,7 @@
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 # command aliases
+[ -z "$(alias mk 2>/dev/null)" ] && aliases_present=false || aliases_present=true
 alias mk="make"
 alias build="make"
 alias wipe="make wipe --silent"
@@ -70,7 +71,7 @@ function setup() {
     # CLASSPATH seperator: Unix/Linux/Mac use ":", Windows uses ";" 
     [ "$(uname | grep 'CYGWIN\|MINGW')" ] && local sep=';' || local sep=':'
 
-    local created=()    # collect environment variable set
+    local created=()    # collect environment variables set
     # build CLASSPATH environment variable, if not exists
     if [ -z "$CLASSPATH" ]; then
         export CLASSPATH=""
@@ -106,8 +107,7 @@ function setup() {
             "--source-path ${P[src]} -d ${P[doc]}$mp_opt "
             "-version -author -noqualifier \"java.*:application.*\""
         )
-        # append packages for javadoc generation
-        jdoc_opts+=($(cd ${P[src]}; find -type d | sed -e 's/[\/\\]/./g' -e 's/^[\.]*//'))
+        # append packages from src/main later in javadoc command: + "application"
         export JDK_JAVADOC_OPTIONS=${jdoc_opts[@]}
         created+=("JDK_JAVADOC_OPTIONS")
     fi
@@ -155,6 +155,11 @@ function setup() {
             echo "    - $file"
         done
 
+    # report created aliases and functions
+    [ "$aliases_present" = "false" ] && echo " - functions and aliases created:" && \
+        echo "    - aliases: mk, build, wipe, clean" && \
+        echo "    - functions: make, show, cmd, copy" && echo "||"
+
     echo "project environment is set (use 'wipe' to reset)"
 }
 
@@ -191,9 +196,10 @@ function cmd() {
     run)        cmd=("java application.Application") ;;
     run-jar)    cmd=("java -jar ${P[final_jar]}") ;;
     run-tests)  cmd=("java -jar ${P[lib]}/junit-platform-console-standalone-1.9.2.jar \\"
-                "     \$(eval echo \$JUNIT_OPTIONS)" "--scan-class-path")
+                "  \$(eval echo \$JUNIT_OPTIONS)" "--scan-class-path")
                 ;;
-    javadoc)    cmd=("javadoc -d ${P[doc]} \$(eval echo \$JDK_JAVADOC_OPTIONS)")
+    javadoc)    cmd=("javadoc -d ${P[doc]} \$(eval echo \$JDK_JAVADOC_OPTIONS) \\"
+                "  \$(cd ${P[src]}; find . -type f | xargs dirname | uniq | cut -c 3-)")
                 ;;
 
     clean)  cmd=("rm -rf ${P[target]} ${P[log]} ${P[doc]}")
@@ -203,7 +209,7 @@ function cmd() {
             cmd=("rm -rf ${wipe_files[@]} ; \\"
                  "$(cmd clean $2); \\"
                  "unset P cmd_shorts CLASSPATH MODULEPATH JDK_JAVAC_OPTIONS; \\"
-                 "unset JDK_JAVADOC_OPTIONS JUNIT_OPTIONS; \\"
+                 "unset JDK_JAVADOC_OPTIONS JUNIT_OPTIONS aliases_present; \\"
                  "unset -f cmd show make copy; \\"
                  "unalias mk build wipe clean"
             ) ;;
@@ -349,5 +355,5 @@ function eclipse_classpath() {
 # execute setup function
 setup
 
-# remove transient functions from process
+# remove transient varibales and functions from process
 unset -f setup eclipse_classpath
