@@ -1,5 +1,6 @@
 /**
- * Package with runnable application classes.
+ * Package with application classes that implement the {@link Runnable} interface
+ * launched from the {@code main()} - method in {@link application.Application}.java.
  * 
  * @version <code style=color:green>{@value application.package_info#Version}</code>
  * @author <code style=color:blue>{@value application.package_info#Author}</code>
