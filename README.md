@@ -45,11 +45,11 @@ Unit tests are in dirctory called *tests*.
  |
  +-- README.md                          # project markup file (this file)
  |
- | # directory to source the project
+ | # directory with files to source the project:
  +--<.env>
  |   +-- project.sh, init.classpath, init.project, init.gitignore
  |
- | # VSCode project configurations
+ | # VSCode project configuration:
  +--<.vscode>
  |   +-- settings.json                  # project-specific VSCode settings
  |   +-- launch.json                    # Java/Debug launch configurtions
@@ -115,7 +115,7 @@ Unit tests are in dirctory called *tests*.
 &nbsp;
 ## 2. Sourcing the Project
 
-Sourcing the project means to set up the environment:
+Sourcing the project means to set up the project environment:
 
 ```sh
 source .env/project.sh
@@ -123,8 +123,11 @@ source .env/project.sh
 
 Executing script
 [project.sh](https://gitlab.bht-berlin.de/sgraupner/setup.se2/-/blob/main/.env/project.sh?ref_type=heads)
-sets environment variables and creates local project files for
-*VS Code* and *eclipse* IDE:
+sets
+[*environment variables*](https://opensource.com/article/19/8/what-are-environment-variables),
+creates local project files for *VS Code* and *eclipse* IDE and sets some
+[*aliases*](https://opensource.com/article/19/7/bash-aliases) and
+[*functions*](https://linuxize.com/post/bash-functions):
 
 ```
 setting the project environment
@@ -139,6 +142,10 @@ setting the project environment
     - .classpath
     - .project
     - .gitignore
+ - functions and aliases created:
+    - aliases: mk, build, wipe, clean
+    - functions: make, show, cmd, copy
+//
 project environment is set (use 'wipe' to reset)
 ```
 
@@ -161,7 +168,6 @@ src/main/application
 src/main/application/Application.java
 src/main/application/Factorizer.java
 src/main/application/package-info.java
-src/main/application/RunPriority.java
 src/main/module-info.java
 src/resources
 src/resources/application.properties
@@ -178,7 +184,8 @@ src/tests/application/Factorizer_Tests.java
 &nbsp;
 ## 3. Building the Application
 
-The *Build-Process* comprises operations such as:
+The [*Build-Process*](https://www.techtarget.com/searchsoftwarequality/definition/build)
+consists of operations such as:
 
  - compile source code
 
@@ -186,7 +193,7 @@ The *Build-Process* comprises operations such as:
 
  - build javadocs
 
- - package the application as '.jar'
+ - package the application as '.jar' file
 
 Command `show` shows operations that are available for the *Build-Process*:
 
@@ -218,10 +225,11 @@ run:
 
 run-tests:
   java -jar libs/junit-platform-console-standalone-1.9.2.jar \
-       $(eval echo $JUNIT_OPTIONS) --scan-class-path
+    $(eval echo $JUNIT_OPTIONS) --scan-class-path
 
 javadoc:
-  javadoc -d docs $(eval echo $JDK_JAVADOC_OPTIONS)
+  javadoc -d docs $(eval echo $JDK_JAVADOC_OPTIONS) \
+    $(cd src/main; find . -type f | xargs dirname | uniq | cut -c 3-)
 
 clean:
   rm -rf target logs docs
@@ -238,8 +246,8 @@ mk compile-tests                  # compile test code
 mk clean compile compile-tests    # execute all commands in order
 ```
 
-The last command is called a *clean build*. It clears the `target` directory
-and re-compiles all source code.
+The last command is called a *clean build*. It clears the `target` directory,
+removes all content and re-compiles all source code.
 
 The result is in the `target` directory:
 
@@ -256,7 +264,6 @@ target/classes/application
 target/classes/application/Application.class
 target/classes/application/Factorizer.class
 target/classes/application/package_info.class
-target/classes/application/RunPriority.class
 target/classes/module-info.class
 target/resources
 target/resources/application.properties
@@ -299,22 +306,21 @@ hardwires the output for *n=36*.
 Implement the method:
 
 ```java
-    /**
-     * Factorize a number into smallest prime factors.
-     * <p>
-     * Examples:
-     * <pre>
-     * n=27 -> [3, 3, 3]
-     * n=1092 -> [2, 2, 3, 7, 13]
-     * n=10952347 -> [7, 23, 59, 1153]
-     * </pre>
-     * @param n number to factorize
-     * @return list of factors
-     */
-    @Override
-    public List<Integer> factorize(int n) {
-      ...
-    }
+/**
+ * Factorize a number {@code n} into its prime factors.
+ * <p>
+ * Examples:
+ * <pre>
+ * n=27 -> [3, 3, 3]
+ * n=1092 -> [2, 2, 3, 7, 13]
+ * n=10952347 -> [7, 23, 59, 1153]
+ * </pre>
+ * @param n number to factorize
+ * @return list of prime factors
+ */
+public List<Integer> factorize(int n) {
+    ...
+}
 ```
 
 to work for other numbers as well. 
@@ -418,7 +424,6 @@ Standard Doclet version 21+35-LTS-2513
 Building tree for all the packages and classes...
 Generating docs\se1_play\application\Application.html...
 Generating docs\se1_play\application\Factorizer.html...
-Generating docs\se1_play\application\RunPriority.html...
 Generating docs\se1_play\application\package-summary.html...
 Generating docs\se1_play\application\package-tree.html...
 Generating docs\se1_play\module-summary.html...
@@ -447,6 +452,10 @@ that describes the class to execute (Main-Class: application.Application).
 ```sh
 mk jar
 ```
+or:
+```sh
+mk package
+```
 
 packages class files and creates the resulting `application-1.0.0-SNAPSHOT.jar`
 in the `target` directory.
@@ -455,6 +464,10 @@ Test the jar-file with:
 
 ```sh
 mk run-jar n=100 n=1000
+```
+or execute directly by java:
+```sh
+java -jar target/application-1.0.0-SNAPSHOT.jar n=100 n=1000
 ```
 
 Output:
@@ -481,7 +494,7 @@ Make sure to **not check-in** files (use *.gitignore* ):
 
 - generated or compiled files (from *target* or *doc* ),
 
-- not sharable project files, e.g. *.classpath* and *.project*,
+- project files not shared, e.g. *.classpath* and *.project*,
 
 - junk files, e.g. *.DS_Store* from Mac.
 
@@ -489,7 +502,7 @@ Check-in files:
 
 - source files including JUnit test sources.
 
-- opt files from the *./resources* directory.
+- files from the *src/resources* directory.
 
 - *.gitignore*, *README.md* .
 
@@ -505,6 +518,7 @@ Output (example):
 ```
 644d3a5 (HEAD -> main) add .gitignore
 615908c (origin/main, origin/HEAD) Initial commit
+...
 ```
 
 Show all committed files:
@@ -513,22 +527,37 @@ Show all committed files:
 git ls-files --recurse-submodules
 ```
 
-Output (may also include ./lib if you checked out the repository):
+Output:
 
 ```
-.gitignore
-.vscode/settings.json           ; optional commit
+.env/init.classpath
+.env/init.gitignore
+.env/init.project
+.env/project.sh
+.vscode/launch.json
+.vscode/launch_terminal.sh
+.vscode/settings.json
 README.md
-lib/...                         ; may be committed
-resources/java-options.opt
-resources/javac-options.opt
-resources/jdoc-options.opt
-resources/junit-options.opt
-src/application/App.java
-test/application/AppTest.java
+libs/jackson/jackson-annotations-2.13.0.jar
+libs/jackson/jackson-core-2.13.0.jar
+libs/jackson/jackson-databind-2.13.0.jar
+libs/jacoco/jacocoagent.jar
+libs/jacoco/jacococli.jar
+libs/junit-platform-console-standalone-1.9.2.jar
+libs/junit/apiguardian-api-1.1.2.jar
+libs/junit/junit-jupiter-api-5.9.3.jar
+libs/junit/junit-platform-commons-1.9.3.jar
+libs/junit/opentest4j-1.2.0.jar
+src/main/application/Application.java
+src/main/application/Factorizer.java
+src/main/application/package-info.java
+src/main/module-info.java
+src/resources/META-INF/MANIFEST.MF
+src/resources/application.properties
+src/resources/logging.properties
+src/tests/application/Application_0_always_pass_Tests.java
+src/tests/application/Factorizer_Tests.java
 ```
-
-
 
 
 &nbsp;
