@@ -158,7 +158,7 @@ function setup() {
     # report created aliases and functions
     [ "$aliases_present" = "false" ] && echo " - functions and aliases created:" && \
         echo "    - aliases: mk, build, wipe, clean" && \
-        echo "    - functions: make, show, cmd, copy" && echo "||"
+        echo "    - functions: make, show, cmd, copy" && echo "//"
 
     echo "project environment is set (use 'wipe' to reset)"
 }
