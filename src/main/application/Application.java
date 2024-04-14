@@ -2,8 +2,7 @@ package application;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Stream;
 
 
@@ -74,6 +73,7 @@ public class Application implements Runnable {
      * 
      * @param <T> type of created instance
      * @param classNames list of fully-qualified class names from which instances are attempted to be created
+     * @param assignable functional interface to test class of instance to create is assignable from {@code T}
      * @param args command line arguments passed to created instance when it has a {@code (String[] args)} constructor
      * @param alt alternative instance supplier when creation from {@code classNames} yields no result
      * @return instance that is assignable from type {@code T}
