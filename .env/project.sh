@@ -59,8 +59,10 @@ function setup() {
         return
 
     # define local variables and fill with values
-    local module_dirs=( $(find ${P[lib]}/* -type d 2>/dev/null) )
-    local module_jars=( $(find ${P[lib]}/*/ -name '*.jar' 2>/dev/null) )
+    # local module_dirs=( $(find ${P[lib]}/* -type d 2>/dev/null) )
+    # local module_jars=( $(find ${P[lib]}/*/ -name '*.jar' 2>/dev/null) )
+    local module_dirs=( $(find ${P[lib]} -type d 2>/dev/null) )
+    local module_jars=( $(find ${P[lib]} -name '*.jar' 2>/dev/null) )
     local entries=(
         "${P[target]}/classes"
         "${P[target]}/test-classes"
