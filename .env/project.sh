@@ -200,8 +200,9 @@ function cmd() {
                 ;;
     javadoc)    # append package names containing .java files after $JDK_JAVADOC_OPTIONS
                 cmd=("javadoc -d ${P[doc]} \$(eval echo \$JDK_JAVADOC_OPTIONS) \\"
-                "  \$(cd ${P[src]}; find . -type f | xargs dirname | uniq | cut -c 3-)")
-                ;;
+                "application"
+                # "  \$(cd ${P[src]}; find . -type f | xargs dirname | uniq | cut -c 3-)"
+                ) ;;
 
     clean)  cmd=("rm -rf ${P[target]} ${P[log]} ${P[doc]}")
             ;;
