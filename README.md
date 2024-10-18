@@ -15,7 +15,8 @@
 ## 1. Getting started
 
 Make sure to have the [Java-JDK](https://www.oracle.com/java/technologies/downloads/)
-version <b>21</b> (LTS, long-term support) installed and all tools show the same version.
+version <b>21</b> (or higher) installed and all tools show the same version.
+Version 21 is a long-term support (LTS) version of the JDK.
 
 Open a terminal and run:
 
@@ -620,9 +621,17 @@ wipe: command not found
 
 Find answers to these quesitons:
 
-1) Where do these magic commands: `make`, `mk`, `build`, `wipe`, etc. ?
+1) What is the difference between a *JDK* and a *JRE*?
 
-1) Where are they defined?
+1) What is a *build process*?
+
+1) Name three steps of the *build process*.
+
+1) What is the result of the *build process*?
+
+1) What is the difference between `mk clean` and `wipe`?
+
+1) Where are these commands defined?
 
 1) What are they (installed programs, scripts, Java code, ... )?
 
@@ -631,15 +640,15 @@ Find answers to these quesitons:
 1) What does the following fragment do?
 
     ```sh
-    local module_jars=( $(find libs/*/ -name '*.jar' 2>/dev/null) )
-    local entries=(
+    module_jars=( $(find libs/*/ -name '*.jar' 2>/dev/null) )
+    entries=(
         "target/classes"
         "target/test-classes"
         "target/resources"
         ${module_jars[@]}
     )
 
-    [ "$(uname | grep 'CYGWIN\|MINGW')" ] && local sep=';' || local sep=':'
+    [ "$(uname | grep 'CYGWIN\|MINGW')" ] && sep=';' || sep=':'
 
     if [ -z "$CLASSPATH" ]; then
         export CLASSPATH=""
@@ -649,3 +658,6 @@ Find answers to these quesitons:
         done
     fi
     ```
+
+1) What are files `.classpath` and `.project` in the project directory?
+
